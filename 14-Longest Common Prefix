@@ -1,0 +1,18 @@
+Problem: https://leetcode.com/problems/longest-common-prefix/
+         Find the longest common prefix string amongst an array of strings.
+         If there is no common prefix, return an empty string "".
+Thought: First sort, then only need to consider the ends.
+Java:
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        int length = strs.length;
+        if (length == 0) return "";
+        if (length == 1) return strs[0];
+        int i = 0;
+        Arrays.sort(strs);
+        int min_len = Math.min(strs[0].length(), strs[length-1].length());
+        while (i < min_len && strs[0].charAt(i) == strs[length-1].charAt(i) )
+            i++;
+        return strs[0].substring(0, i);
+    }
+}
