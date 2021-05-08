@@ -1,0 +1,24 @@
+Problem: https://leetcode.com/problems/container-with-most-water/
+Thought: Traverse from the ends to the middle; Always choose the higher end; Keep track of the bigger area.
+Java:
+class Solution {
+    public int maxArea(int[] height) {
+        int start = 0;
+        int end = height.length - 1;
+        int result = 0;
+        int temp = 0;
+
+        while (start < end) {
+            temp = Math.min(height[start], height[end]) * (end - start);
+            if (height[start] < height[end]) {
+                start++;
+            }
+            else {
+                end--;
+            }
+            result = Math.max(result, temp);
+        }
+
+        return result;
+    }
+}
