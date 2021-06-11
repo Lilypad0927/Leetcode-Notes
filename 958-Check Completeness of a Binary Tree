@@ -1,0 +1,26 @@
+Question: Given the root of a binary tree, determine if it is a complete binary tree.
+          In a complete binary tree, every level, except possibly the last, is completely filled, and all nodes in the last level are as far left as possible. 
+          It can have between 1 and 2^h nodes inclusive at the last level h.
+Note: Don't forget case like 1,2,3,4,null,6,7
+Java:
+class Solution {
+    public boolean isCompleteTree(TreeNode root) {
+        if (root == null) return true;
+        if (root.right!=null && root.left==null) return false;
+        int nodes_number = countNodes(root);
+        return (isCompleteTree(root.left, 1, nodes_number) && isCompleteTree(root.right, 2, nodes_number));
+    }
+    
+    private boolean isCompleteTree(TreeNode root, int index, int nodes_number) {
+        if (root == null) return true;
+        if (root.right!=null && root.left==null) return false;
+        if (index >= nodes_number) return false;
+        return (isCompleteTree(root.left, 2 * index + 1, nodes_number) && 
+                isCompleteTree(root.right, 2 * index + 2, nodes_number));
+    }
+    
+    private int countNodes(TreeNode root) {
+        if (root == null) return 0;
+        return (1 + countNodes(root.left) + countNodes(root.right));
+    }
+}
