@@ -1,0 +1,23 @@
+Question: An integer has monotone increasing digits if and only if each pair of adjacent digits x and y satisfy x <= y.
+          Given an integer n, return the largest number that is less than or equal to n with monotone increasing digits.
+Note: Learn how to convert char, int, string.
+Java:
+class Solution {
+    public int monotoneIncreasingDigits(int n) {
+        if (n<10) return n;
+        String number = String.valueOf(n);
+        int index = -1;
+        int size = number.length();
+        for (int i = 1; i<size; i++){
+            if (number.charAt(i) < number.charAt(i-1)){
+                index = i;
+                while (index > 0 && number.charAt(index) <= number.charAt(index-1)) index--;
+                break;
+            }
+        }
+        if (index == -1) return n;
+        return Integer.parseInt(number.substring(0, index) + 
+                                String.valueOf(Character.getNumericValue(number.charAt(index))-1) + 
+                                new String(new char[size-index-1]).replace("\0", "9"));
+    }
+}
