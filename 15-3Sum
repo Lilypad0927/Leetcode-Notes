@@ -1,52 +1,98 @@
 Problem: https://leetcode.com/problems/3sum/
          Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
          Notice that the solution set must not contain duplicate triplets.
-Thought: First sort.
-Java:
-class Solution {
-    public List<List<Integer>> threeSum(int[] nums) {
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
-        int length = nums.length;
-        if (length < 3) return result;
-        Arrays.sort(nums);
-        if (nums[0] > 0 || nums[length - 1] < 0) return result;
-        for (int i = 0; i < length - 2; i++){
-            if (i > 0 && nums[i] == nums[i-1]) continue;
-            int l = i+1;
-            int r = length-1;
-            while (l<r){
-                int total = nums[i]+nums[l]+nums[r];
-                if (total < 0) l++;
-                else if (total > 0) r--;
-                else {
-                    List<Integer> temp = Arrays.asList(new Integer[] {nums[i], nums[l], nums[r]});
-                    Collections.sort(temp);
-                    if (!result.contains(temp)) result.add(temp);
-                    while (l<r && nums[l]==nums[l+1]) l++;
-                    while (l<r && nums[r]==nums[r-1]) r--;
-                    l++;
-                    r--;
-                }
-            }
-        }
-        return result;
-    }
-}
+Thought: First sort. Then when iterating the 1st number, start the other 2 from head & tail.
 
-First attempt:
-/*
-        //nums = Arrays.stream(nums).distinct().toArray(); It's wrong to remove duplicates but need to know how
-        for (int i = 0; i < length - 2; i++) {
-            for (int j = i + 1; j < length - 1; j++) {
-                for (int k = length - 1; k > j; k--) {
-                    if (k == length - 1 && nums[i] + nums[j] + nums[k] < 0) break;
-                    if (nums[i] + nums[j] + nums[k] == 0) {
-                        //List<Integer> temp = List.of(nums[i], nums[j], nums[k]); This will cause sort to crush
-                        List<Integer> temp = Arrays.asList(new Integer[] {nums[i], nums[j], nums[k]});
-                        Collections.sort(temp);
-                        if (!result.contains(temp)) result.add(temp);
-                    }
+C++:
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        set<vector<int>> s;
+        vector<vector<int>> output;
+        for (int i = 0; i < nums.size()-2; i++){
+            if (nums[i] > 0) break;
+            int j = i + 1;
+            int k = nums.size() - 1;
+            while (j < k) {
+                int sum = nums[i] + nums[j] + nums[k];
+                if (sum == 0) {
+                    s.insert({nums[i], nums[j], nums[k]});
+                    j++;
+                    k--;
+                } else if (sum < 0) {
+                    j++;
+                } else {
+                    k--;
                 }
             }
         }
-*/
+        for(auto triplets : s)
+            output.push_back(triplets);
+        return output;
+    }
+};
+
+Python:
+class Solution(object):
+    def threeSum(self, nums):
+        target = 0
+        nums.sort()
+        s = set()
+        output = []
+        for i in range(len(nums)):
+            j = i + 1
+            k = len(nums) - 1
+            while j < k:
+                sum = nums[i] + nums[j] + nums[k]
+                if sum == target:
+                    s.add((nums[i], nums[j], nums[k]))
+                    j += 1
+                    k -= 1
+                elif sum < target:
+                    j += 1
+                else:
+                    k -= 1
+        output = list(s)
+        return output
+
+Java:
+public List<List<Integer>> threeSum(int[] nums) {
+    Arrays.sort(nums); // 排序数组
+    // 返回结果
+    List<List<Integer>> res = new ArrayList<>();
+    // 循环数组，确定第一个数字
+    for(int i=0;i<nums.length;i++){
+        // 当前数字
+        int n = nums[i];
+        // 如果等于前一个数字，跳过
+        if(i>0&&n==nums[i-1]) continue;
+        // 当n大于0时，不会再找到合理解，结束循环
+        if(n>0) break;
+        // 定义左右两个指针，找到能组成合理解的另外两个数
+        int left=i+1,right=nums.length-1;
+        // 当左指针小于右指针
+        while(left<right){
+            // 左指针数字
+            int l=nums[left];
+            // 右指针数字
+            int r=nums[right];
+            // 三个数字之和
+            int sum=n+l+r;
+            // 和等于0时为合理解
+            if(sum==0){
+                // 将三个数字加入返回结果
+                res.add(Arrays.asList(n,l,r));
+                // 向右移动左指针，找到一个不等于当前左指针数字的下一个数
+                while(left<right&&nums[left]==l) left++;
+                // 向左移动右指针，找到一个不等于当前右指针数字的下一个数
+                while(left<right&&nums[right]==r) right--;
+            }else if(sum<0){ // 和小于0
+                left++; // 向右移动左指针，增加左指针数字
+            }else{ // 和大于0
+                right--; // 向左移动右指针，减小右指针数字
+            }
+        }
+    }
+    return res;
+}
