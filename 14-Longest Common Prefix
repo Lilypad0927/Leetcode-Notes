@@ -1,18 +1,44 @@
 Problem: https://leetcode.com/problems/longest-common-prefix/
          Find the longest common prefix string amongst an array of strings.
          If there is no common prefix, return an empty string "".
-Thought: First sort, then only need to consider the ends.
+Thought: First sort, then only need to consider the 2 ends.
+
 Java:
 class Solution {
     public String longestCommonPrefix(String[] strs) {
-        int length = strs.length;
-        if (length == 0) return "";
-        if (length == 1) return strs[0];
         int i = 0;
         Arrays.sort(strs);
-        int min_len = Math.min(strs[0].length(), strs[length-1].length());
-        while (i < min_len && strs[0].charAt(i) == strs[length-1].charAt(i) )
+        int min_len = Math.min(strs[0].length(), strs[strs.length-1].length());
+        while (i < min_len && strs[0].charAt(i) == strs[strs.length-1].charAt(i) )
             i++;
         return strs[0].substring(0, i);
     }
 }
+
+Python:
+class Solution(object):
+    def longestCommonPrefix(self, strs):
+        strs = sorted(strs)
+        result = ""
+        first = strs[0]
+        last = strs[-1]
+        for i in range(min(len(first), len(last))):
+            if first[i] != last[i]:
+                return result
+            result += first[i]
+        return result
+
+C++:
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        string ans = "";
+        sort(strs.begin(), strs.end());
+        string first = strs[0], last = strs[strs.size()-1];
+        for (int i = 0; i < min(first.size(), last.size()); i++){
+            if (first[i] != last[i]) return ans;
+            ans += first[i];
+        }
+        return ans;
+    }
+};
