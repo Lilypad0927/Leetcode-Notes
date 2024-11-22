@@ -1,5 +1,44 @@
 Question: https://leetcode.com/problems/remove-nth-node-from-end-of-list/
     Given the head of a linked list, remove the nth node from the end of the list and return its head.
+
+C++:
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode *curr = head;
+        ListNode *to_modify = head;
+        int i = 0;
+        while (curr->next != nullptr){
+            if (i < n) {
+                i++;
+            }
+            else {
+                to_modify = to_modify->next;
+            }
+            curr = curr->next;
+        }
+        if (i != n || to_modify->next == nullptr){
+            head = head->next;
+            delete to_modify;
+            return head;
+        }
+        ListNode *to_delete = to_modify->next;
+        to_modify->next = to_modify->next->next;
+        delete to_delete;
+        return head;
+    }
+};
+
 Java:
 /**
  * Definition for singly-linked list.
