@@ -4,39 +4,74 @@ Question: https://leetcode.com/problems/3sum-closest/
     Return the sum of the three integers. You may assume that each input would have exactly one solution.
 Thought:
     Sort and keep pointers.
+
+Python:
+class Solution(object):
+    def threeSumClosest(self, nums, target):
+        nums = sorted(nums)
+        closest = nums[0] + nums[1] + nums[-1]
+        for i in range(len(nums)-2):
+            j = i + 1
+            k = len(nums)-1
+            while (j < k):
+                tmp = nums[i] + nums[j] + nums[k]
+                if abs(closest-target) > abs(tmp-target):
+                    closest = tmp
+                if tmp < target:
+                    j += 1
+                elif tmp > target:
+                    k -= 1
+                else:
+                    return target
+        return closest
+
+C++:
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        int closest_sum = INT_MAX / 2;  // A large value but not overflow
+        for (int i = 0; i < nums.size() - 2; ++i) {
+            int left = i + 1, right = nums.size() - 1;
+            while (left < right) {
+                int current_sum = nums[i] + nums[left] + nums[right];
+                if (abs(current_sum - target) < abs(closest_sum - target)) {
+                    closest_sum = current_sum;
+                }
+                if (current_sum < target) {
+                    ++left;
+                } else if (current_sum > target) {
+                    --right;
+                } else {
+                    return current_sum;
+                }
+            }
+        }
+        return closest_sum;
+    }
+};
+
 Java:
 class Solution {
     public int threeSumClosest(int[] nums, int target) {
         Arrays.sort(nums);
-        
-        int minimalDist = Integer.MAX_VALUE;
-        int res = 0;
-
-        for (int i=0; i<nums.length-2; i++){
-            int l = i+1;
-            int r = nums.length-1;
-            while (l < r){
-                int sum = nums[i] + nums[l] + nums[r];
-                if (sum == target) 
-                    return target;
-                else if(sum > target)
-                {
-                    if((sum - target) < minimalDist){
-                        minimalDist = sum - target;
-                        res = sum;
-                    }
-                    r--;
-                }else{
-                    if((target - sum) < minimalDist){
-                        minimalDist = target - sum;
-                        res = sum;
-                    } 
-                    l++;
+        int closest_sum = Integer.MAX_VALUE / 2;  // A large value but not overflow
+        for (int i = 0; i < nums.length - 2; ++i) {
+            int left = i + 1, right = nums.length - 1;
+            while (left < right) {
+                int current_sum = nums[i] + nums[left] + nums[right];
+                if (Math.abs(current_sum - target) < Math.abs(closest_sum - target)) {
+                    closest_sum = current_sum;
+                }
+                if (current_sum < target) {
+                    ++left;
+                } else if (current_sum > target) {
+                    --right;
+                } else {
+                    return current_sum;
                 }
             }
-            while (i<nums.length -1 && nums[i] == nums[i+1]) i++;
         }
-
-        return res;
+        return closest_sum;
     }
 }
