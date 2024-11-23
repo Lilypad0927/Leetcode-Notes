@@ -39,6 +39,30 @@ public:
     }
 };
 
+Python:
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def removeNthFromEnd(self, head, n):
+        """
+        :type head: Optional[ListNode]
+        :type n: int
+        :rtype: Optional[ListNode]
+        """
+        curr, to_modify = head, head
+        for _ in range(n):
+            curr = curr.next
+        if curr is None:
+            return head.next
+        while curr.next is not None:
+            to_modify = to_modify.next
+            curr = curr.next
+        to_modify.next = to_modify.next.next
+        return head
+
 Java:
 /**
  * Definition for singly-linked list.
