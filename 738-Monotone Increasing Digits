@@ -1,6 +1,7 @@
 https://leetcode.com/problems/monotone-increasing-digits/
-Question: An integer has monotone increasing digits if and only if each pair of adjacent digits x and y satisfy x <= y.
-          Given an integer n, return the largest number that is less than or equal to n with monotone increasing digits.
+Problem: An integer has monotone increasing digits if and only if each pair of adjacent digits x and y satisfy x <= y.
+         Given an integer n, return the largest number that is less than or equal to n with monotone increasing digits.
+
 Note: Learn how to convert char, int, string.
 Thought: if not monotone increasing, go down 1 digit and change the tail to 999...
 
